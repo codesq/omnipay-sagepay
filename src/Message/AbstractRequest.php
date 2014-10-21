@@ -7,9 +7,20 @@ namespace Omnipay\SagePay\Message;
  */
 abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 {
+    protected $protocol = '2.23';
     protected $liveEndpoint = 'https://live.sagepay.com/gateway/service';
     protected $testEndpoint = 'https://test.sagepay.com/gateway/service';
     protected $simulatorEndpoint = 'https://test.sagepay.com/Simulator';
+
+    public function getProtocol()
+    {
+        return $this->getParameter('protocol');
+    }
+
+    public function setProtocol($value)
+    {
+        return $this->setParameter('protocol', $value);
+    }
 
     public function getVendor()
     {
@@ -99,10 +110,40 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->setParameter('apply3DSecure', $value);
     }
 
+    public function getCreateCardToken()
+    {
+        return $this->getParameter('createCardToken');
+    }
+
+    public function setCreateCardToken($value)
+    {
+        return $this->setParameter('createCardToken', $value);
+    }
+
+    public function getStoreCardToken()
+    {
+        return $this->getParameter('storeCardToken');
+    }
+
+    public function setStoreCardToken($value)
+    {
+        return $this->setParameter('storeCardToken', $value);
+    }
+
+    public function getCardToken()
+    {
+        return $this->getParameter('cardToken');
+    }
+
+    public function setCardToken($value)
+    {
+        return $this->setParameter('cardToken', $value);
+    }
+
     protected function getBaseData()
     {
         $data = array();
-        $data['VPSProtocol'] = '2.23';
+        $data['VPSProtocol'] = $this->getProtocol();
         $data['TxType'] = $this->action;
         $data['Vendor'] = $this->getVendor();
         $data['AccountType'] = $this->getAccountType() ?: 'E';

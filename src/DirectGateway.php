@@ -21,10 +21,21 @@ class DirectGateway extends AbstractGateway
     public function getDefaultParameters()
     {
         return array(
+            'protocol' => '',
             'vendor' => '',
             'testMode' => false,
             'simulatorMode' => false,
         );
+    }
+
+    public function getProtocol()
+    {
+        return $this->getParameter('protocol');
+    }
+
+    public function setProtocol($value)
+    {
+        return $this->setParameter('protocol', $value);
     }
 
     public function getVendor()
@@ -72,8 +83,8 @@ class DirectGateway extends AbstractGateway
         return $this->completeAuthorize($parameters);
     }
 
-    public function refund(array $parameters = array())
+    public function deleteCardToken(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\SagePay\Message\RefundRequest', $parameters);
+        return $this->createRequest('\Omnipay\SagePay\Message\DeleteCardTokenRequest', $parameters);
     }
 }
