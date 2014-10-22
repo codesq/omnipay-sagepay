@@ -78,6 +78,11 @@ class DirectGateway extends AbstractGateway
         return $this->createRequest('\Omnipay\SagePay\Message\DirectPurchaseRequest', $parameters);
     }
 
+    public function purchaseByToken(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\SagePay\Message\DirectPurchaseByTokenRequest', $parameters);
+    }
+
     public function completePurchase(array $parameters = array())
     {
         return $this->completeAuthorize($parameters);

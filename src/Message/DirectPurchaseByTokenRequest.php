@@ -5,13 +5,9 @@ namespace Omnipay\SagePay\Message;
 /**
  * Sage Pay Direct Authorize Request
  */
-class DirectAuthorizeRequest extends AbstractRequest
+class DirectPurchaseByTokenRequest extends AbstractRequest
 {
-    protected $action = 'DEFERRED';
-    protected $cardBrandMap = array(
-        'mastercard' => 'mc',
-        'diners_club' => 'dc'
-    );
+    protected $action = 'PAYMENT';
 
     protected function getBaseAuthorizeData()
     {
@@ -26,7 +22,6 @@ class DirectAuthorizeRequest extends AbstractRequest
         $data['ClientIPAddress'] = $this->getClientIp();
         $data['ApplyAVSCV2'] = $this->getApplyAVSCV2() ?: 0;
         $data['Apply3DSecure'] = $this->getApply3DSecure() ?: 0;
-        $data['CreateToken'] = $this->getCreateCardToken() ?: 0;
 
         // billing details
         $data['BillingFirstnames'] = $card->getBillingFirstName();
@@ -57,21 +52,9 @@ class DirectAuthorizeRequest extends AbstractRequest
     public function getData()
     {
         $data = $this->getBaseAuthorizeData();
-        $this->getCard()->validate();
-
-        $data['CardHolder'] = $this->getCard()->getName();
-        $data['CardNumber'] = $this->getCard()->getNumber();
+        $data['Token'] = $this->getCardReference();
         $data['CV2'] = $this->getCard()->getCvv();
-        $data['ExpiryDate'] = $this->getCard()->getExpiryDate('my');
-        $data['CardType'] = $this->getCardBrand();
-
-        if ($this->getCard()->getStartMonth() and $this->getCard()->getStartYear()) {
-            $data['StartDate'] = $this->getCard()->getStartDate('my');
-        }
-
-        if ($this->getCard()->getIssueNumber()) {
-            $data['IssueNumber'] = $this->getCard()->getIssueNumber();
-        }
+        $data['StoreToken'] = $this->getStoreCardToken() ?: 0;
 
         return $data;
     }
@@ -79,16 +62,5 @@ class DirectAuthorizeRequest extends AbstractRequest
     public function getService()
     {
         return 'vspdirect-register';
-    }
-
-    protected function getCardBrand()
-    {
-        $brand = $this->getCard()->getBrand();
-
-        if (isset($this->cardBrandMap[$brand])) {
-            return $this->cardBrandMap[$brand];
-        }
-
-        return $brand;
     }
 }

@@ -130,16 +130,6 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->setParameter('storeCardToken', $value);
     }
 
-    public function getCardToken()
-    {
-        return $this->getParameter('cardToken');
-    }
-
-    public function setCardToken($value)
-    {
-        return $this->setParameter('cardToken', $value);
-    }
-
     protected function getBaseData()
     {
         $data = array();
